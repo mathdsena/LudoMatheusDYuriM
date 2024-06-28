@@ -11,7 +11,7 @@ namespace LudoMatheusDYuriM
     {
         private String cor;
         private int identificador;
-        private String nome;
+        public String nome;
         public Peao[] peao = new Peao[4];
 
         public Jogador(string cor, int identificador, String nome)
@@ -70,22 +70,37 @@ namespace LudoMatheusDYuriM
             if (peaoNovo) { count++; }
             if (count >= 1)
             {
-                Console.WriteLine("Escolha um peão:");
-                for (int i = 0; i < peao.Length; i++)
+                bool peaoValido = false;
+                int[] peoesValidos = new int[5];
+                int k = 0;
+                do
                 {
-                    if (peao[i].Posicao > -1)
+                    Console.WriteLine("Escolha um peão:");
+                    for (int i = 0; i < peao.Length; i++)
                     {
-                        Console.WriteLine($"{i + 1}. para o peão {peao[i].identificador + 1};");
+                        if (peao[i].Posicao > -1)
+                        {
+                            Console.WriteLine($"{i + 1}. para o peão {peao[i].identificador + 1};");
+                            peoesValidos[k] = peao[i].identificador + 1;
+                            k++;
+                        }
                     }
+                    if (peaoNovo) { Console.WriteLine("5. para criar um novo peão"); peoesValidos[4] = 5; }
+
+                    int qualPeao = int.Parse(Console.ReadLine());
+
+                    foreach (int i in peoesValidos)
+                    {
+                        if (qualPeao == i)
+                        {
+                            peaoValido = true;
+                            return (qualPeao - 1);
+                        }
+                    }
+
+                    Console.WriteLine("Opção inválida, tente novamente");
                 }
-                if (peaoNovo) { Console.WriteLine("5. para criar um novo peão"); }
-                
-                int qualPeao = int.Parse(Console.ReadLine());
-                if (qualPeao > -1)
-                {
-                    return (qualPeao - 1);
-                }
-                return -1;
+                while (!peaoValido);
             }
             else
             {
@@ -101,12 +116,13 @@ namespace LudoMatheusDYuriM
             return -1;
         }
 
-        public string LancarDado()
+        public void LancarDado(out string ganhador, out int referencia)
         {
             bool peaoNovo = false;
-            string ganhador;
             int id = -1;
             int dado, count = 1, op = -1;
+            referencia = -1;
+            ganhador = null;
             do
             {
                 Random n = new Random();
@@ -128,6 +144,7 @@ namespace LudoMatheusDYuriM
                     {
                         peao[op].Mover(dado);
                         Console.WriteLine("O peão " + (op + 1) + " chegou a posição " + peao[op].Posicao);
+                       referencia = op;
                     }
                     else if (op == 4 && peaoNovo)
                     {
@@ -147,15 +164,13 @@ namespace LudoMatheusDYuriM
             {
                 if (peao[op].Posicao >= 52)
                 {
-                    return ganhador = nome;
+                    ganhador = nome;
                 }
                 else
                 {
-                    return ganhador = null;
+                    ganhador = null;
                 }
             }
-
-            return null;
         }
     }
 }

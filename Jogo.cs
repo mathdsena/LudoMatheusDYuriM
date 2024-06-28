@@ -25,7 +25,8 @@ namespace LudoMatheusDYuriM
                     }
 
                     Console.WriteLine("Turno do jogador " + (i + 1) + " "+ tabuleiro.jogador[i].GetNome());
-                    ganhador = tabuleiro.jogador[i].LancarDado();
+                    tabuleiro.jogador[i].LancarDado(out ganhador, out int id);
+                    if (id > -1) { tabuleiro.VerificarCaptura(i, id); }
                     Console.WriteLine();
 
                     i++;
